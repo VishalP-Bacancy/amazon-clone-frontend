@@ -1,0 +1,27 @@
+.button-parent{
+  display: flex;
+  place-items: center;
+  justify-content: space-between;
+}
+
+.align-right {
+  justify-content: right !important;
+}
+
+.align-left {
+  justify-content: left !important;
+}
+
+.align-center {
+  display: flex;
+  justify-content: center !important;
+}
+
+.a {
+  text-decoration: none;
+  color: white;
+}
+
+.b {
+  text-decoration: none;
+}
