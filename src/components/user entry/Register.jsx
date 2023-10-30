@@ -5,6 +5,8 @@ import {
   Paper,
   TextField,
   InputLabel,
+  Select, 
+  MenuItem,
   Typography,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -42,13 +44,13 @@ const Register = () => {
       })
       .then((res) => {
         if (res.status === 201) {
-          alert("Registartion Successfull. Verify email and proceed to login");
+          alert("Registration Successfull. Verify email and proceed to login");
           navigate("/login");
         }
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("Registartion failed. Navigating to home");
+        alert("Registration failed. Navigating to home");
         navigate("/");
       });
   };
@@ -143,8 +145,8 @@ const Register = () => {
         </form>
         <br />
         <Typography>
-          Signup as afilliate?   
-          <Link to="/afilliate/register">  Sign up</Link>
+          Signup as affiliate?   
+          <Link to="/affiliate/register">  Sign up</Link>
         </Typography>
         <Typography>
           Already have an account?

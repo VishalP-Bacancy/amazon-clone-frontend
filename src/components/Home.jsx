@@ -17,7 +17,7 @@ const Home = () => {
     if (token) {
       axios(config)
         .then((response) => {
-          setUserData(response.data);
+          setUserData(response.data.data);
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -35,7 +35,7 @@ const Home = () => {
       ) : (
         <>
           <div className="align-center">
-            <h1>Welcome {userData.first_name}</h1>
+            <h1>Welcome {userData.first_name}!</h1>
           </div>
         </>
       )}

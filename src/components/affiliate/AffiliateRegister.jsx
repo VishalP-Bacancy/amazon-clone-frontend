@@ -32,6 +32,7 @@ const AffiliateRegister = () => {
     formData.append("lastName", data.lastName);
     formData.append("email", data.email);
     formData.append("password", data.password);
+    console.log('Form data :- ', formData)
     axios
       .post("http://localhost:3000/api/affiliate/register", formData, {
         headers: {
@@ -40,13 +41,13 @@ const AffiliateRegister = () => {
       })
       .then((res) => {
         if (res.status === 201) {
-          alert("Registartion Successfull. Verify email and proceed to login");
+          alert("Registration Successfull. Verify email and proceed to login");
           navigate("/login");
         }
       })
       .catch((error) => {
         console.error("Error:", error);
-        alert("Registartion failed. Navigating to home");
+        alert("Registration failed. Navigating to home");
         navigate("/");
       });
   };

@@ -41,10 +41,10 @@ const Login = () => {
         password: data.password,
       })
       .then((res) => {
-        if (res.data.token) {
-          localStorage.setItem("token", res?.data?.token || "");
+        if (res.data.data.token) {
+          localStorage.setItem("token", res?.data?.data?.token || "");
           setTimeout(() => {
-            login(res.data.token);
+            login(res.data.data.token);
             dispatch(fetchCartApi());
             alert("Login Successful");
             navigate("/");
@@ -117,7 +117,7 @@ const Login = () => {
          Create account?       <Link to="/register">Sign Up</Link>
         </Typography>
         <Typography>
-         Login as Affilliate?       <Link to="/afilliate/login">Login</Link>
+         Login as Affiliate?       <Link to="/affiliate/login">Login</Link>
         </Typography>
       </Paper>
     </Grid>

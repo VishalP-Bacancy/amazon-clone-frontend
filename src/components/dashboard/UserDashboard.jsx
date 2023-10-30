@@ -17,8 +17,8 @@ const UserDashboard = () => {
   useEffect(() => {
     axios(config)
       .then((response) => {
-        console.log(response.data )
-        setUserData(response.data);
+        console.log('dddddddd', response.data.data)
+        setUserData(response.data.data);
       })
       .catch((error) => {
         console.error("Error:", error);
