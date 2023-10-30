@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "../components/user entry/Login";
 import Register from "../components/user entry/Register";
-import AfilliateRegister from '../components/afilliate/AfilliateRegister';
-import AfilliateLogin from '../components/afilliate/AfilliateLogin';
+import AffiliateRegister from '../components/affiliate/AffiliateRegister';
+import AffiliateLogin from '../components/affiliate/AffiliateLogin';
 import NavigationBar from "../components/NavigationBar";
 import ProductsView from "../components/products/ProductsView";
 import Home from "../components/Home";
@@ -35,8 +35,8 @@ const router = () => {
           <>
             <Route path="login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/afilliate/login" element={<AfilliateLogin />}/>
-            <Route path="/afilliate/register" element={<AfilliateRegister />}/>
+            <Route path="/affiliate/login" element={<AffiliateLogin />}/>
+            <Route path="/affiliate/register" element={<AffiliateRegister />}/>
           </>
         ) : (
           <>

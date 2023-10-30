@@ -17,7 +17,7 @@ import {
   import { useDispatch } from "react-redux";
   import { fetchCartApi } from "../../util/redux/reducers/CartApi";
   
-  const AfilliateLogin = () => {
+  const AffiliateLogin = () => {
     const { login } = AuthContextExport();
     const dispatch = useDispatch();
     const paperStyle = {
@@ -64,7 +64,7 @@ import {
             <Avatar style={avatarStyle}>
               <LockOutlinedIcon />
             </Avatar>
-            <h2>Afilliate Sign In</h2>
+            <h2>Affiliate Sign In</h2>
           </Grid>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
@@ -114,7 +114,7 @@ import {
             </Button>
           </form>
           <Typography>
-           Create an afilliate account?       <Link to="/afilliate/register">Sign Up</Link>
+           Create an affiliate account?       <Link to="/affiliate/register">Sign Up</Link>
           </Typography>
           <Typography>
            Login as customer?       <Link to="/login">Login</Link>
@@ -124,5 +124,5 @@ import {
     );
   };
   
-  export default AfilliateLogin;
+  export default AffiliateLogin;
   

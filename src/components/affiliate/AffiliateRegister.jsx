@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 
-const AfilliateRegister = () => {
+const AffiliateRegister = () => {
   const navigate = useNavigate();
   const paperStyle = { padding: "30px 20px", width: 300, margin: "20px auto" };
   const headerStyle = { margin: 0 };
@@ -33,7 +33,7 @@ const AfilliateRegister = () => {
     formData.append("email", data.email);
     formData.append("password", data.password);
     axios
-      .post("http://localhost:3000/api/auth/register", formData, {
+      .post("http://localhost:3000/api/affiliate/register", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -57,7 +57,7 @@ const AfilliateRegister = () => {
           <Avatar style={avatarStyle}>
             <AddCircleOutlineIcon />
           </Avatar>
-          <h2 style={headerStyle}>Afilliate Sign Up</h2>
+          <h2 style={headerStyle}>Affiliate Sign Up</h2>
           <Typography variant="caption" gutterBottom>
             Please fill this form to create an account !
           </Typography>
@@ -142,11 +142,11 @@ const AfilliateRegister = () => {
         <br />
         <Typography>
           Already have an account?
-          <Link to="/afilliate/login">Login in</Link>
+          <Link to="/affiliate/login">Login in</Link>
         </Typography>
       </Paper>
     </Grid>
   );
 };
 
-export default AfilliateRegister;
+export default AffiliateRegister;

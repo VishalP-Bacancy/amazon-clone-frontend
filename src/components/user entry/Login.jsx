@@ -41,10 +41,10 @@ const Login = () => {
         password: data.password,
       })
       .then((res) => {
-        if (res.data.data.token) {
-          localStorage.setItem("token", res?.data?.data?.token || "");
+        if (res.data.token) {
+          localStorage.setItem("token", res?.data?.token || "");
           setTimeout(() => {
-            login(res.data.data.token);
+            login(res.data.token);
             dispatch(fetchCartApi());
             alert("Login Successful");
             navigate("/");
