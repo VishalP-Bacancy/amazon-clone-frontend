@@ -1,13 +1,15 @@
 import {
   Grid,
   Paper,
-  Avatar,
   TextField,
   Button,
   InputLabel,
   Typography,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import LoginIcon from '@mui/icons-material/Login';
 import { Link, useNavigate } from "react-router-dom";
 import { loginSchema } from "../../validations/UserSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,27 +18,33 @@ import axios from "axios";
 import { AuthContextExport } from "../../util/context/AuthContext";
 import { useDispatch } from "react-redux";
 import { fetchCartApi } from "../../util/redux/reducers/CartApi";
+import { useState } from "react";
 
 const Login = () => {
   const { login } = AuthContextExport();
   const dispatch = useDispatch();
   const paperStyle = {
-    padding: 20,
-    height: "70vh",
-    width: 280,
+    padding: "30px 20px",
+    height: "40.6vh",
+    width: 300,
     margin: "20px auto",
   };
-  const avatarStyle = { backgroundColor: "#1bbd7e" };
   const btnstyle = { margin: "8px 0" };
+  const headerStyle = { margin: 0 };
+
   const navigate = useNavigate();
 
   const formOptions = { resolver: yupResolver(loginSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
 
+  const [role, setRole] = useState("USER");
+
+
   const onSubmit = (data) => {
+    console.log('dataaaaaaaaa', role)
     axios
-      .post("http://localhost:3000/api/auth/login", {
+      .post(`http://localhost:3000/api/${role === 'USER'? 'auth': 'affiliate'}/login`, {
         email: data.email,
         password: data.password,
       })
@@ -52,19 +60,27 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.log(error.message);
-        alert("Login failed. Navigating to home");
-        navigate("/");
+        if (error.response) {
+          // The server returned an error response
+          const errorResponse = error.response.data;
+          if (errorResponse.msg) {
+            alert(errorResponse.msg); // Display the error message from the server
+          } else {
+            alert("An error occurred on the server.");
+          }
+        } else {
+          console.error("Error:", error);
+          alert("Login failed. Navigating to home");
+          navigate("/");
+        }
       });
   };
   return (
     <Grid>
-      <Paper elevation={10} style={paperStyle}>
+      <Paper elevation={15} style={paperStyle}>
         <Grid align="center">
-          <Avatar style={avatarStyle}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <h2>Sign In</h2>
+            <LoginIcon fontSize="large"/>
+          <h2 style={headerStyle}>Sign In</h2>
         </Grid>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
@@ -92,6 +108,18 @@ const Login = () => {
               {errors.password?.message}
             </InputLabel>
           )}
+            <FormControl fullWidth variant="standard">
+              <InputLabel htmlFor="role">Role*</InputLabel>
+              <Select
+                name="role"
+                label="Role*"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <MenuItem value="USER">User</MenuItem>
+                <MenuItem value="AFFILIATE">Affiliate</MenuItem>
+              </Select>
+            </FormControl>
           <Button
             type="submit"
             color="primary"
@@ -116,9 +144,7 @@ const Login = () => {
         <Typography>
          Create account?       <Link to="/register">Sign Up</Link>
         </Typography>
-        <Typography>
-         Login as Affiliate?       <Link to="/affiliate/login">Login</Link>
-        </Typography>
+    
       </Paper>
     </Grid>
   );

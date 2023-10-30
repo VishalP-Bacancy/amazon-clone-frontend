@@ -1,6 +1,5 @@
-import React from "react";
+import { useState } from "react";
 import {
-  Avatar,
   Grid,
   Paper,
   TextField,
@@ -8,10 +7,10 @@ import {
   Select, 
   MenuItem,
   Typography,
+  FormControl,
 } from "@mui/material";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 import "../../align.css";
 import { Link, useNavigate } from "react-router-dom";
 import { userSchema } from "../../validations/UserSchema";
@@ -23,11 +22,12 @@ const Register = () => {
   const navigate = useNavigate();
   const paperStyle = { padding: "30px 20px", width: 300, margin: "20px auto" };
   const headerStyle = { margin: 0 };
-  const avatarStyle = { backgroundColor: "#1bbd7e" };
 
   const formOptions = { resolver: yupResolver(userSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
+
+  const [role, setRole] = useState("USER");
 
   const onSubmit = (data) => {
     const formData = new FormData();
@@ -36,35 +36,44 @@ const Register = () => {
     formData.append("lastName", data.lastName);
     formData.append("email", data.email);
     formData.append("password", data.password);
+    formData.append("role", role);
+    console.log(`http://localhost:3000/api/${role === 'USER'? 'auth': 'affiliate'}/register`)
     axios
-      .post("http://localhost:3000/api/auth/register", formData, {
+      .post(`http://localhost:3000/api/${role === 'USER'? 'auth': 'affiliate'}/register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
         if (res.status === 201) {
-          alert("Registration Successfull. Verify email and proceed to login");
+          alert("Registration Successful. Verify email and proceed to login");
           navigate("/login");
+        } else if (res.status === 400) {
+          alert(res.data.msg); // This line should work now
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
-        alert("Registration failed. Navigating to home");
-        navigate("/");
+        if (error.response) {
+          // The server returned an error response
+          const errorResponse = error.response.data;
+          if (errorResponse.msg) {
+            alert(errorResponse.msg); // Display the error message from the server
+          } else {
+            alert("An error occurred on the server.");
+          }
+        } else {
+          console.error("Error:", error);
+          alert("Registration failed. Navigating to home");
+          navigate("/");
+        }
       });
   };
   return (
     <Grid>
-      <Paper elevation={20} style={paperStyle}>
+      <Paper elevation={15} style={paperStyle}>
         <Grid align="center">
-          <Avatar style={avatarStyle}>
-            <AddCircleOutlineIcon />
-          </Avatar>
+            <PersonAddIcon fontSize="large"/>
           <h2 style={headerStyle}>Sign Up</h2>
-          <Typography variant="caption" gutterBottom>
-            Please fill this form to create an account !
-          </Typography>
         </Grid>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
@@ -121,6 +130,18 @@ const Register = () => {
               {errors.password?.message}
             </InputLabel>
           )}
+             <FormControl fullWidth variant="standard">
+              <InputLabel htmlFor="role">Role*</InputLabel>
+              <Select
+                name="role"
+                label="Role*"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <MenuItem value="USER">User</MenuItem>
+                <MenuItem value="AFFILIATE">Affiliate</MenuItem>
+              </Select>
+            </FormControl>
 
           <br />
           <div className="button-parent">
@@ -144,10 +165,6 @@ const Register = () => {
           </div>
         </form>
         <br />
-        <Typography>
-          Signup as affiliate?   
-          <Link to="/affiliate/register">  Sign up</Link>
-        </Typography>
         <Typography>
           Already have an account?
           <Link to="/login">   Login in</Link>

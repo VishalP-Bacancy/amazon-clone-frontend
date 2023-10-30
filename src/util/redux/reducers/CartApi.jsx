@@ -7,7 +7,6 @@ import {
   updateCart,
 } from "../actions/Actions.jsx";
 import copy from "clipboard-copy";
-import Swal from 'sweetalert2';
 import { showNotification } from "./../../showNotification.js";
 
 const axiosInstance = axios.create({
@@ -53,7 +52,7 @@ export const addToCartApi = (productData, cartData) => {
 };
 
 export const generateReferralLink = (productData) => {
-  return async (dispatch) => {
+  return async () => {
     try {
       const response = await axiosInstance.post("/api/affiliate/generate", {
         prodId: productData.id,

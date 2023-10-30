@@ -50,10 +50,9 @@ const UserDashboard = () => {
             src={userData?.profile_picture || defaultProfilePic}
             style={{ width: "150px", height: "150px" }}
           />
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold'}}>
             User Information
           </Typography>
-          <Typography variant="body1">ID: {userData?.id}</Typography>
           <Typography variant="body1">
             Name: {userData?.first_name + " " + userData?.last_name}
           </Typography>
