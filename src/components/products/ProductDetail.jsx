@@ -24,7 +24,7 @@ const ProductDetail = () => {
       .catch(() => {
         navigate("/*");
       });
-  }, []);
+  }, [navigate, productId]);
   return (
     <div>
       <div style={{ padding: "20px" }}>
