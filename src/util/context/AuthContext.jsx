@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useReducer } from "react";
 
-const intitalState = { token: null };
+const intitalState = { token: null, role: null };
 
 const authReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      return { ...state, token: action.token };
+      return { ...state, token: action.token, role: action.role };
     case "LOGOUT":
       return { ...state, token: null };
     default:
@@ -18,8 +18,9 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, intitalState);
 
-  const login = (token) => {
-    dispatch({ type: "LOGIN", token });
+  const login = (token,role) => {
+    console.log(role)
+    dispatch({ type: "LOGIN", token, role });
   };
 
   const logout = () => {
@@ -27,7 +28,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token: state.token, login, logout }}>
+    <AuthContext.Provider value={{ token: state.token, role: state.role, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

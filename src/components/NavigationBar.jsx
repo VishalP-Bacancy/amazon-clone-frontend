@@ -21,6 +21,7 @@ import { styled } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 
 function NavigationBar() {
+  const defaultProfilePic = 'https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/255px-Flag_of_India.svg.png';
   const cartData = useSelector((state) => state.cartReducer);
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
@@ -30,10 +31,11 @@ function NavigationBar() {
       padding: "0 4px",
     },
   }));
-  const { token } = AuthContextExport();
-  const pages = token
+  const { token, role } = AuthContextExport();
+  console.log(role)
+  const pages = token && role=='USER'
     ? ["home", "products", "orders"]
-    : ["home", "products", "register", "login"];
+    : token && role=='AFFILIATE'? ["home", "products"]: ["home", "products", "register", "login"];
   const settings = token ? ["dashboard", "logout"] : ["register", "login"];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -176,7 +178,7 @@ function NavigationBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="" />
+                <Avatar alt="Remy Sharp" src={defaultProfilePic} />
               </IconButton>
             </Tooltip>
             <Menu

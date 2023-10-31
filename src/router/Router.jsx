@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "../components/user entry/Login";
 import Register from "../components/user entry/Register";
@@ -14,15 +14,30 @@ import Error from "../components/Error";
 import { useDispatch } from "react-redux";
 import { fetchCartApi } from "../util/redux/reducers/CartApi";
 import Orders from "../components/Orders";
+import axios from "axios";
 
-const router = () => {
+const Router = () => {
   const dispatch = useDispatch();
+  // const [role, setRole] = useState('')
   const token = localStorage.getItem("token");
   const { login } = AuthContextExport();
+
   useEffect(() => {
     if (token) {
-      login(token);
-      dispatch(fetchCartApi());
+      axios
+      .get(`http://localhost:3000/api/users/role`, {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then(response => {
+        const role = response.data.userRole
+        console.log('Role:- ', response.data.userRole)
+        // setRole(response.data.userRole)
+        login(token, role);
+        dispatch(fetchCartApi());
+      })
     }
   }, []);
   return (
@@ -52,4 +67,4 @@ const router = () => {
   );
 };
 
-export default router;
+export default Router;
