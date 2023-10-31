@@ -37,7 +37,7 @@ const Register = () => {
     formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("role", role);
-    console.log(`http://localhost:3000/api/${role === 'USER'? 'auth': 'affiliate'}/register`)
+
     axios
       .post(`http://localhost:3000/api/${role === 'USER'? 'auth': 'affiliate'}/register`, formData, {
         headers: {

@@ -32,7 +32,6 @@ function NavigationBar() {
     },
   }));
   const { token, role } = AuthContextExport();
-  console.log(role)
   const pages = token && role=='USER'
     ? ["home", "products", "orders"]
     : token && role=='AFFILIATE'? ["home", "products"]: ["home", "products", "register", "login"];
@@ -156,7 +155,7 @@ function NavigationBar() {
           </Box>
           {!token ? (
             <></>
-          ) : (
+          ) : role === 'USER' ? (
             <>
               <Link to="/cart" className="a">
                 <IconButton aria-label="cart">
@@ -174,6 +173,8 @@ function NavigationBar() {
                 </IconButton>
               </Link>
             </>
+          ) : (
+            <></>
           )}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">

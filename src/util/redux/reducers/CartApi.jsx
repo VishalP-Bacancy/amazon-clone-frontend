@@ -8,14 +8,15 @@ import {
 } from "../actions/Actions.jsx";
 import copy from "clipboard-copy";
 import { showNotification } from "./../../showNotification.js";
+import { axiosClient } from "./apiClients.jsx";
 
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000/",
-  headers: {
-    Authorization: `${localStorage.getItem("token")}`,
-    "Content-Type": "application/json",
-  },
-});
+// const axiosInstance = axios.create({
+//   baseURL: "http://localhost:3000/",
+//   headers: {
+//     Authorization: `${localStorage.getItem("token")}`,
+//     "Content-Type": "application/json",
+//   },
+// });
 
 export const fetchCartApi = () => {
   const config = {
@@ -40,7 +41,7 @@ export const fetchCartApi = () => {
 export const addToCartApi = (productData, cartData) => {
   return async (dispatch) => {
     try {
-      await axiosInstance.post("/cart/add/", {
+      await axiosClient.post("/cart/add/", {
         ProductId: productData.id,
         quantity: 1,
       });
@@ -54,7 +55,7 @@ export const addToCartApi = (productData, cartData) => {
 export const generateReferralLink = (productData) => {
   return async () => {
     try {
-      const response = await axiosInstance.post("/api/affiliate/generate", {
+      const response = await axiosClient.post("/api/affiliate/generate", {
         prodId: productData.id,
       })
       await copy(response.data.Referral_Link)   //copy referral link
@@ -68,7 +69,7 @@ export const generateReferralLink = (productData) => {
 export const emptyAllItems = () => {
   return async (dispatch) => {
     try {
-      await axiosInstance.delete("/cart/removeAll");
+      await axiosClient.delete("/cart/removeAll");
       dispatch(emptyCart());
     } catch (error) {
       console.log(error.message);
@@ -79,7 +80,7 @@ export const emptyAllItems = () => {
 export const removeProduct = (id) => {
   return async (dispatch) => {
     try {
-      await axiosInstance.request({
+      await axiosClient.request({
         method: "delete",
         url: "/cart/remove",
         data: { ProductId: +id },
@@ -94,7 +95,7 @@ export const removeProduct = (id) => {
 export const updateProduct = (id, quantity) => {
   return async (dispatch) => {
     try {
-      await axiosInstance.request({
+      await axiosClient.request({
         method: "patch",
         url: "/cart/update",
         data: { ProductId: +id, quantity },

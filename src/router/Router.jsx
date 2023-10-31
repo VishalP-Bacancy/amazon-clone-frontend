@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "../components/user entry/Login";
 import Register from "../components/user entry/Register";
@@ -20,8 +20,8 @@ const Router = () => {
   const dispatch = useDispatch();
   // const [role, setRole] = useState('')
   const token = localStorage.getItem("token");
-  const { login } = AuthContextExport();
-
+  const { login,role } = AuthContextExport();
+console.log("bhcbb",role)
   useEffect(() => {
     if (token) {
       axios
@@ -49,14 +49,17 @@ const Router = () => {
             <Route path="login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </>
-        ) : (
+        ) : role==='USER'?(
           <>
             <Route path="logout" element={<Logout />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/orders" element={<Orders />} />
           </>
-        )}
+        ):(<>
+            <Route path="logout" element={<Logout />} />
+            <Route path="/dashboard" element={<UserDashboard />} />
+        </>)}
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Navigate to="/" replace={true} />} />
         <Route path="/products" element={<ProductsView />} />
