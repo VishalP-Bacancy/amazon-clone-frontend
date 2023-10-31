@@ -12,10 +12,30 @@ const ProductDetail = () => {
   const { token } = AuthContextExport();
   const params = useParams();
   const productId = params.id;
+  const [isLoggedIn, setIsLoggedIn] = useState({});
   const [data, setData] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [role, setRole] = useState('USER')
   useEffect(() => {
+
+    axios
+      .get('http://localhost:3000/api/affiliate/user', {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log('lopopopopp',response.data.status)
+        setIsLoggedIn(response.data.status)
+        setRole('AFFILIATE')
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
+
     axios
       .get(`http://localhost:3000/products/${productId}`)
       .then((response) => {
@@ -62,6 +82,9 @@ const ProductDetail = () => {
           ) : (
             <></>
           )}
+          {
+            isLoggedIn && role === 'AFFILIATE' ? <>
+           
           <div className="button-parent">
             <div className="align-right">
               <Button
@@ -75,7 +98,8 @@ const ProductDetail = () => {
                 Generate Referral Link
               </Button>
             </div>
-          </div>
+          </div> </> : <></>
+          }
           <div className="button-parent">
             <div className="align-right">
               <Button
