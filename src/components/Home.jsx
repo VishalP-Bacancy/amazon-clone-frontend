@@ -17,7 +17,7 @@ const Home = () => {
     if (token) {
       axios(config)
         .then((response) => {
-          setUserData(response.data.data);
+          setUserData(response.data.data.userData);
         })
         .catch((error) => {
           console.error("Error:", error);

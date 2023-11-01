@@ -15,13 +15,13 @@ import { useDispatch } from "react-redux";
 import { fetchCartApi } from "../util/redux/reducers/CartApi";
 import Orders from "../components/Orders";
 import axios from "axios";
+import ProductDetailAffiliate from "../components/products/ProductDetail-affiliate";
 
 const Router = () => {
   const dispatch = useDispatch();
   // const [role, setRole] = useState('')
   const token = localStorage.getItem("token");
   const { login,role } = AuthContextExport();
-console.log("bhcbb",role)
   useEffect(() => {
     if (token) {
       axios
@@ -60,6 +60,7 @@ console.log("bhcbb",role)
             <Route path="logout" element={<Logout />} />
             <Route path="/dashboard" element={<UserDashboard />} />
         </>)}
+          <Route path="/product/:id/:productName" element={<ProductDetailAffiliate />}/>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Navigate to="/" replace={true} />} />
         <Route path="/products" element={<ProductsView />} />

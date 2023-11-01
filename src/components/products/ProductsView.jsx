@@ -24,6 +24,7 @@ const ProductsView = () => {
   const [totalProduct, setTotalProduct] = React.useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { role } = AuthContextExport();
 
   const queryParams = {
     page,
@@ -189,7 +190,7 @@ const ProductsView = () => {
                       View Details
                     </Button>
                   </div>
-                  {token ? (
+                  {token && role === 'USER' ? (
                     <>
                       <div className="align-right">
                         <Button

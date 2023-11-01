@@ -1,22 +1,46 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Typography, Paper, Button } from "@mui/material";
 import axios from "axios";
 import Rating from "@mui/material/Rating";
 import "../../align.css";
 import { AuthContextExport } from "../../util/context/AuthContext";
 import { useDispatch } from "react-redux";
-import { addToCartApi, generateReferralLink } from "../../util/redux/reducers/CartApi";
+import { addToCartApi } from "../../util/redux/reducers/CartApi";
+import Cookies from 'js-cookie';
+import { useCookies } from "react-cookie";
 
-const ProductDetail = () => {
+const ProductDetailAffiliate = () => {
   const { token } = AuthContextExport();
   const params = useParams();
   const productId = params.id;
   const [isLoggedIn, setIsLoggedIn] = useState({});
   const [data, setData] = useState({});
   const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(['refer_code']);
   const dispatch = useDispatch();
+  // const [searchParams, setSearchParams] = useSearchParams();
   const [role, setRole] = useState('USER')
+
+  //Cookies.set('name', 'value', { expires: 7 });
+  //const name = Cookies.get('name');
+  //Cookies.remove('name');
+  useEffect(() => {
+    const productId = params.id; // Replace with your product ID
+    const searchParams = new URLSearchParams(window.location.search);
+    const affiliateId = searchParams.get('ref');
+
+    setCookie('refer_code', {
+      productId: productId,
+      affiliateId: affiliateId,
+    }, { maxAge: 7 * 24 * 60 * 60 }); // Expires in 7 days
+  }, []);
+
+  // Get the cookie
+  useEffect(() => {
+    console.log('AAAAAAAAAA', cookies.refer_code);
+  }, [cookies]);
+
   useEffect(() => {
 
     axios
@@ -82,7 +106,7 @@ const ProductDetail = () => {
           ) : (
             <></>
           )}
-          {
+          {/* {
             isLoggedIn && role === 'AFFILIATE' ? <>
            
           <div className="button-parent">
@@ -99,7 +123,7 @@ const ProductDetail = () => {
               </Button>
             </div>
           </div> </> : <></>
-          }
+          } */}
           <div className="button-parent">
             <div className="align-right">
               <Button
@@ -120,4 +144,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default ProductDetailAffiliate;

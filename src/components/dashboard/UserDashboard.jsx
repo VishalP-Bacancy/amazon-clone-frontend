@@ -4,24 +4,36 @@ import axios from "axios";
 
 const UserDashboard = () => {
   const [userData, setUserData] = useState({});
-  console.log('fffffffff', userData)
-  const config = {
-    method: "get",
-    url: "http://localhost:3000/api/users/get-user",
-    headers: {
-      Authorization: `${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
-  };
+  const [role, setRole] = useState('USER')
 
   useEffect(() => {
-    axios(config)
-      .then((response) => {
-        setUserData(response.data.data);
+    axios
+      .get(`http://localhost:3000/api/users/role`, {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      }).then(response => {
+        console.log(response.data.userRole)
+        axios(`http://localhost:3000/api/${response.data.userRole === 'USER' ? 'users/get-user' : 'affiliate/user'}`, {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log('PFPFPFP:-  ', response.data.data)
+          setRole(response.data.data.role)
+          setUserData(response.data.data.userData);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
       })
       .catch((error) => {
         console.error("Error:", error);
       });
+   
   }, []);
 
   const defaultProfilePic = 'https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/255px-Flag_of_India.svg.png';
@@ -45,12 +57,12 @@ const UserDashboard = () => {
           }}
         >
           <Avatar
-            alt={userData.name}
+            alt={userData?.name}
             src={userData?.profile_picture || defaultProfilePic}
             style={{ width: "150px", height: "150px" }}
           />
           <Typography variant="h6" gutterBottom style={{ fontWeight: 'bold'}}>
-            User Information
+            {role === 'USER' ? 'User' : 'Affiliate'} Information
           </Typography>
           <Typography variant="body1">
             Name: {userData?.first_name + " " + userData?.last_name}
