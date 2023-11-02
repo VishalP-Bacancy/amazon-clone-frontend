@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Typography, Button, IconButton } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import "../align.css";
@@ -15,12 +15,23 @@ import {
   updateProduct,
 } from "../util/redux/reducers/CartApi";
 import axios from "axios";
+import { axiosClient } from "../util/redux/reducers/apiClients";
+import { useCookies } from "react-cookie";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cartReducer);
+  const [cookies, setCookie] = useCookies(['refer_code']);
+  const [referCodeData, setReferCodeData] = useState({})
 
-  const navigate = useNavigate();
+
+  useEffect(() => {
+      console.log('MMMMMMAAAAA', cookies.refer_code);
+      setReferCodeData(cookies.refer_code)
+    }, [cookies]);
+  
+  
+    const navigate = useNavigate();
 
   const total = cartItems.reduce(
     (acc, item) => acc + item.price_per_unit * item.quantity,
@@ -39,6 +50,23 @@ const Cart = () => {
   };
 
   const handleConfirm = () => {
+    if(referCodeData){
+      axiosClient
+      .post(`/api/affiliate/commission`, {
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        data: {
+          affiliateId: referCodeData.affiliateId,
+          commission: 20        /*////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+        }
+      }).then(() => {
+        console.log('Commission added to affiliate successfully.!')
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
     const config = {
       method: "post",
       url: "http://localhost:3000/api/orders/place",
@@ -55,6 +83,8 @@ const Cart = () => {
         paymentMethod: "credit_card",
       },
     };
+
+
     axios(config).then(() => {
       dispatch(emptyAllItems());
       setOpen(false);

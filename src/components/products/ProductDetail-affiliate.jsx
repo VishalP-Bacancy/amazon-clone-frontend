@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Typography, Paper, Button } from "@mui/material";
 import axios from "axios";
 import Rating from "@mui/material/Rating";
@@ -7,20 +7,18 @@ import "../../align.css";
 import { AuthContextExport } from "../../util/context/AuthContext";
 import { useDispatch } from "react-redux";
 import { addToCartApi } from "../../util/redux/reducers/CartApi";
-import Cookies from 'js-cookie';
 import { useCookies } from "react-cookie";
 
 const ProductDetailAffiliate = () => {
-  const { token } = AuthContextExport();
+  const { token, role } = AuthContextExport();
   const params = useParams();
   const productId = params.id;
-  const [isLoggedIn, setIsLoggedIn] = useState({});
   const [data, setData] = useState({});
   const navigate = useNavigate();
   const [cookies, setCookie] = useCookies(['refer_code']);
   const dispatch = useDispatch();
   // const [searchParams, setSearchParams] = useSearchParams();
-  const [role, setRole] = useState('USER')
+  // const [role, setRole] = useState('USER')
 
   //Cookies.set('name', 'value', { expires: 7 });
   //const name = Cookies.get('name');
@@ -37,27 +35,25 @@ const ProductDetailAffiliate = () => {
   }, []);
 
   // Get the cookie
-  useEffect(() => {
-    console.log('AAAAAAAAAA', cookies.refer_code);
-  }, [cookies]);
+  // useEffect(() => {
+  //   console.log('AAAAAAAAAA', cookies.refer_code);
+  // }, [cookies]);
 
   useEffect(() => {
 
-    axios
-      .get('http://localhost:3000/api/affiliate/user', {
-        headers: {
-          Authorization: `${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log('lopopopopp',response.data.status)
-        setIsLoggedIn(response.data.status)
-        setRole('AFFILIATE')
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    // axios
+    //   .get('http://localhost:3000/api/affiliate/user', {
+    //     headers: {
+    //       Authorization: `${localStorage.getItem("token")}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //   })
+    //   .then(() => {
+    //     setRole('AFFILIATE')
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
 
 
     axios

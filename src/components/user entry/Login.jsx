@@ -19,6 +19,7 @@ import { AuthContextExport } from "../../util/context/AuthContext";
 import { useDispatch } from "react-redux";
 import { fetchCartApi } from "../../util/redux/reducers/CartApi";
 import { useState } from "react";
+import { axiosClient } from "../../util/redux/reducers/apiClients";
 
 const Login = () => {
   const { login } = AuthContextExport();
@@ -43,8 +44,8 @@ const Login = () => {
 
   const onSubmit = (data) => {
     console.log('dataaaaaaaaa', role)
-    axios
-      .post(`http://localhost:3000/api/${role === 'USER'? 'auth': 'affiliate'}/login`, {
+    axiosClient
+      .post(`/api/${role === 'USER'? 'auth': 'affiliate'}/login`, {
         email: data.email,
         password: data.password,
       })
@@ -66,7 +67,8 @@ const Login = () => {
           if (errorResponse.msg) {
             alert(errorResponse.msg); // Display the error message from the server
           } else {
-            alert("An error occurred on the server.");
+            alert("An error occurred on the server. Navigating to home");
+            navigate("/");
           }
         } else {
           console.error("Error:", error);

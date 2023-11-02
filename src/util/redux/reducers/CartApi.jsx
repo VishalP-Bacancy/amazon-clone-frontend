@@ -58,7 +58,8 @@ export const generateReferralLink = (productData) => {
       const response = await axiosClient.post("/api/affiliate/generate", {
         prodId: productData.id,
       })
-      await copy(response.data.Referral_Link)   //copy referral link
+      console.log('reeffferrr', response.data.data.referralLink)
+      await copy(response.data.data.referralLink)   //copy referral link
      showNotification({icon: "success", title: "Link copied!", position: 'top'})
     } catch (error) {
       console.log(error.message)
